@@ -3,8 +3,11 @@
  * Author: Isonguyo John <isongjohn014@gmail.com>
  * Created on 14 May, 2024.
  *
+ * Modified by: Isonguyo John
  * Last modified: 14 May, 2024.
  *
+ *
+ * C library of common and useful functions.
  */
 
 #include "commonlib.h"
