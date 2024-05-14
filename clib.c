@@ -10,6 +10,9 @@
  * C library of common and useful functions.
  */
 
+#include <ctype.h>
+#include <signal.h>
+#include <errno.h>
 #include "commonlib.h"
 
 
