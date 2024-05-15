@@ -1,2 +1,2 @@
-# clib
-Clib(pronounce: C-LIB)  is a library of common and useful C functions
+# Commomlib
+__Commonlib__ is a library of common and useful C functions.
