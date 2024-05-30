@@ -1,10 +1,10 @@
 /* COMMONLIB.C
  *
  * Author: Isonguyo John <isongjohn014@gmail.com>
- * Created on 14 May, 2024.
+ * Created on 14/05/2024.
  *
  * Modified by: Isonguyo John
- * Last modified: 14 May, 2024.
+ * Last modified: 15/05/2024.
  *
  *
  * C library of common and useful functions.
@@ -13,6 +13,10 @@
 #include <ctype.h>
 #include <signal.h>
 #include <errno.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 #include "commonlib.h"
 
 
@@ -162,6 +166,7 @@ int64_t gcd(int64_t a,int64_t b)
     sm = rem;
   }
 
+
   return sm;
 }
 
@@ -188,4 +193,132 @@ char *str_tolower(char *str, size_t len)
   }
 
   return str;
+}
+
+
+char *str_rev(char *str)
+{
+  if(str == NULL)
+    return NULL;
+
+  size_t len = strlen(str);
+
+  char *p = str , *q = str + len - 1;
+
+  while(q>p)
+  {
+    char tmp = *p;;
+    *p++  = *q;
+    *q-- = tmp;
+  }
+
+  return str;
+}
+
+
+size_t str_slice(char dst[],const char *str,int start,int end)
+{
+  
+  if(start < 0 || end < 0)
+    return 0;
+  
+  int len = end - start,i;
+
+  if(len < 0)
+    return 0;
+
+  const char *p = str+start;
+
+  for(i=0; i < len && p != NULL; ++i)
+    dst[i] = *p++;
+
+  dst[i] = '\0';
+
+  return (size_t) len;
+}
+
+
+char *str_trim(char str[])
+{
+  char *p = str, *q = str + strlen(str)-1;
+
+  while(isblank(*p))
+    ++p;
+  while(q > p && isblank(*q))
+    --q;
+
+  size_t len = q - p + 1;
+  memmove(str,p,len);
+  str[len] = '\0';
+  return str;
+}
+
+
+
+char *readline_fp(const char *path, char buf[],size_t bufsz, int lineno)
+{
+  FILE *fp;
+  int ch;
+  int curr_line = 0;
+  long offset = 0;
+
+  if((fp = fopen(path, "rb")) == NULL)
+    return NULL;
+
+  while((ch = getc(fp)) != EOF && curr_line != lineno)
+  {
+    if(ch == EOL)
+      ++curr_line;
+
+    ++offset;
+  }
+
+  if(curr_line != lineno)
+    return NULL;
+
+  if(fseek(fp,offset,SEEK_SET) != 0)
+    return NULL;
+
+  if(fgets(buf,bufsz,fp) == NULL)
+    return NULL;
+
+  fclose(fp);
+  return buf;
+}
+
+
+char *readline_fd(int fd, char buf[],size_t bufsz, int lineno)
+{
+  FILE *fp;
+  int ch;
+  fpos_t fpos; 
+  int curr_line = 0;
+  long offset = 0;
+
+  if((fp = fdopen(fd, "rb")) == NULL)
+    return NULL;
+
+  fgetpos(fp,&fpos);
+  rewind(fp);
+  while((ch = getc(fp)) != EOF && curr_line != lineno)
+  {
+    if(ch == EOL)
+      ++curr_line;
+
+    ++offset;
+  }
+
+  if(curr_line != lineno)
+    return NULL;
+
+  if(fseek(fp,offset,SEEK_SET) != 0)
+    return NULL;
+
+  if(fgets(buf,bufsz,fp) == NULL)
+    return NULL;
+
+  fflush(fp);
+  fsetpos(fp,&fpos);
+  return buf;
+
 }

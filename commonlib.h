@@ -13,13 +13,10 @@
 #ifndef COMMONLIB_H
 #define COMMONLIB_H
 
-#include <unistd.h>
-#include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-#include <sys/stat.h>
 #include <dirent.h>
 
 #ifndef PATH_MAX
@@ -29,7 +26,7 @@
 #define NO_HIDDEN 1
 #define MAX(x,y) ((x) > (y)?(x):(y))
 #define ABS(x) ((x) < 0?-1*(x):(x))
-
+#define EOL 10 //END OF LINE
 
 typedef struct {
   mode_t mode;
@@ -87,6 +84,39 @@ char *str_toupper(char *str, size_t len);
  * Returns `str`
  */
 char *str_tolower(char *str, size_t len);
+
+
+/*[str_rev]- reverses a string
+ * Returns `str`
+ */
+char *str_rev(char *str);
+
+
+/*[str_slice]-
+ *
+ */
+size_t str_slice(char *dst,const char *str,int start,int end);
+
+
+/*[str_trim]- Remove blank characters from the beginning and end
+ * of a string.
+ * Return `str`
+ */
+char *str_trim(char *str);
+
+
+/*[readline_fp]- 
+ *
+ */
+
+char *readline_fp(const char *path, char buffer[],size_t buffer_size, int lineno);
+
+/*[readline_fd]-
+ *
+ *
+ */
+
+char *readline_fd(int fd, char buffer[],size_t buffersize, int lineno);
 
 
 #endif
