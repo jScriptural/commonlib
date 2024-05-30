@@ -1,10 +1,10 @@
 /* COMMONLIB.H
  *
  * Author: Isonguyo John <isongjohn014@gmail.com>
- * created on 14 May, 2024.
+ * created on 14/05/2024.
  *
  * Modified by: Isonguyo John
- * Last modified: 14 May, 2024.
+ * Last modified: 30/05/2024.
  *
  * Header file for clib.c
  */
