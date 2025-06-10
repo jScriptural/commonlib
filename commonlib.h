@@ -118,5 +118,18 @@ char *readline_fp(const char *path, char buffer[],size_t buffer_size, int lineno
 
 char *readline_fd(int fd, char buffer[],size_t buffersize, int lineno);
 
+/*[itob] - convert an integer, 'num', to 
+ * string representation in base 'base' 
+ * (2 <= base <= 36) and stores it in str.
+ * if `str` is NULL, it computes and return 
+ * the size(including NUL byte) of the array 
+ * sufficient to hold the result string.
+ *
+ * Return -1 if `base' is less than 2 or 
+ * greater than 36 else return the size of 
+ * the result string including the 
+ * terminating NUL byte.
+ */
+ssize_t itob(int num, char *str, int base)
 
 #endif

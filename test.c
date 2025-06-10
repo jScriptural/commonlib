@@ -7,20 +7,17 @@
 
 int main(void)
 {
-  double A[4][4] = {[0][0]=3, [1][1]=5, [2][2]=-3,[3][3]=4};
-  double B[4][4] = {1,2,3,4,5,6,7,8,9,8,5,2,1,4,0,-24};
-  double C[4][4]={0};
+  double A[1][3] = {-2/5.0,1/5.0,1};
+  double B[1][3]= {-2,1,5};
+  double c[1][3] = {0};
 
-  matrix_print("A",4,4,A);
-  matrix_print("B",4,4,B);
+  matrix_print("A",1,3,A);
+  matrix_print("B",1,3,B);
 
+  vector_crossproduct(1,3,A,B,c);
+  
+  matrix_print("AхB",1,3,c);
 
-  errno=0;
-  matrix_sub(4,4,B,A,C);
-  if(errno == 0)
-    matrix_print("B-A",4,4,C);
-  else 
-    perror("product");
 
   return 0;
 }

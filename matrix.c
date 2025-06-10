@@ -1,13 +1,14 @@
 /* MATRIX.C
  *
- * Author: Isonguyo John <isongjohn014@gmail.com>
+ * Author:Isonguyo John
+ * Email: isonguyojohndeveloper@gmail.com
+ *
  * Created on 06/04/2025.
- *
  * Modified by: Isonguyo John
- * Last modified: 06/04/2025.
+ * Last modified: 23/05/2025.
  *
- *
- * C library of functions for working with 2D matrices.
+ * C library of functions for working with 2D
+ * matrices.
  */
 
 #include "matrix.h"
@@ -162,7 +163,7 @@ void matrix_inverse(int n, double const m[restrict n][n], double inv[restrict n]
 
 
 
-double matrix_dotproduct(int nr,int nc,const double m1[nr][nc], const double m2[nr][nc])
+double vector_dotproduct(int nr,int nc,const double m1[nr][nc], const double m2[nr][nc])
 {
   if(nr != 1 && nc != 1)
   {
@@ -184,7 +185,7 @@ double matrix_dotproduct(int nr,int nc,const double m1[nr][nc], const double m2[
 
 
 
-void matrix_crossproduct(int nr,int nc, const double m1[nr][nc],const double m2[nr][nc], double res[nr][nc])
+void vector_crossproduct(int nr,int nc, const double m1[nr][nc],const double m2[nr][nc], double res[nr][nc])
 {
   if((nr != 1 && nc != 1)||(nr != 3 && nc != 3))
   {
@@ -287,3 +288,38 @@ void matrix_sub(int nr,int nc, const double m1[nr][nc],const  double m2[nr][nc],
 }
 
 
+void vector_proj(int nr, int nc, const double m1[nr][nc], const double m2[nr][nc], double res[nr][nc])
+{
+  double m1dotm2, m2dotm2, c;
+  if(nr != 1 && nc != 1)
+  {
+    errno = EINVAL;
+    return;
+  }
+
+  //calculate the dot product m1·m2
+  m1dotm2 = vector_dotproduct(nr,nc,m1,m2);
+  //calculate the dot product m2·m2
+  m2dotm2 = vector_dotproduct(nr,nc,m2,m2);
+
+  //c is the component of m1 along m2
+  c = m1dotm2/m2dotm2;
+  
+  //if row vector
+  if(nr == 1)
+  {
+    for(int i=0; i < nc; ++i)
+      res[0][i] = c * m2[0][i];
+  }
+  // if column vector
+  else
+  {
+    for(int i=0; i < nr; ++i)
+      res[i][0] = c * m2[i][0];
+  }
+}
+
+double vector_sqnorm(int nr, int nc, const double matrix[nr][nc])
+{
+  return vector_dotproduct(nr,nc,matrix,matrix);
+}
