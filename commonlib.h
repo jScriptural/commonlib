@@ -36,6 +36,20 @@ typedef struct {
 
 typedef __direntry DIRENTRY;
 
+//Status flags for parse_int
+enum PARSE_STATUS {
+  //At least a digit was parse
+  //successfully
+  PS_VALID = 0,
+
+  //parse integer greater than INT_MAX
+  //(as defined in limits.h) resulting 
+  //in overflow.
+  PS_OVERFLOW = -1,
+
+  //no digit was parsed
+  PS_EMPTYSTRING = -2,
+};
 
 /*[str_concat]- concatenate strings `str1`,`str2` without modifying the original strings.
  * The new string should be deallocated  with `free`.
@@ -130,6 +144,36 @@ char *readline_fd(int fd, char buffer[],size_t buffersize, int lineno);
  * the result string including the 
  * terminating NUL byte.
  */
-ssize_t itob(int num, char *str, int base)
+ssize_t itob(int num, char *str, int base);
+
+
+
+
+/*[parse_int] - parses a null-terminated string 
+ * `s` to convert it into an integer.
+ * It handles optional leading whitespace, an 
+ * optional sign (+ or -), and digits, while 
+ * ignoring underscores (_) within the numeric 
+ * portion. The function returns the parsed 
+ * integer and sets the `ps` pointer to 
+ * indicate the parsing status using the 
+ * PARSE_STATUS enum.
+ * parse_int("1_123_456",&ps) returns 1123456.
+ * 
+ * ps indicates if the return integer is valid
+ * or not.(check documentation of 
+ * enum PARSE_STATUS.
+ *
+ * Returns the parsed integer, adjusted for the 
+ * sign if present.If the string is empty 
+ * (PS_EMPTYSTRING), returns 0.
+ * If overflow occurs (PS_OVERFLOW), returns 
+ * INT_MAX (for positive numbers) or 
+ * INT_MIN (for negative numbers)
+ *
+ */
+
+int parse_int(const char *str, enum PARSE_STATUS *ps);
+
 
 #endif

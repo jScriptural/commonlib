@@ -384,3 +384,65 @@ ssize_t itob(int n, char *s, int b)
   // the NUL byte
   return ++len;
 }
+  
+  
+int parse_int(const char *s, enum PARSE_STATUS *ps)
+{
+  *ps =PS_VALID;
+  int integer = 0;
+  int sign = 0;
+  int n=0, j=0, k=0, i=0;
+  //int max_int = INT_MAX;
+
+  for(; isblank(s[n]) ; ++n);
+  if(s[n] == '+')
+    sign += 1, ++n;
+  else if(s[n] == '-')
+    sign -= 1, ++n;
+
+  for(k=n,j=n; s[j] != '\0'; ++j)
+  {
+    if(isdigit(s[j]))
+      ++k;
+    else if((!isdigit(s[j])) && s[j] != '_')
+      break;   
+  }
+
+  if(k == n)
+  {
+    *ps = PS_EMPTYSTRING;
+    return 0;
+  }
+
+  for (i = n; i < j; ++i) 
+  {
+    if (isdigit(s[i])) 
+    {
+        int digit = s[i] - 48;
+        if (integer > INT_MAX / 10 || (integer == INT_MAX / 10 && digit > INT_MAX % 10)) 
+	{
+            *ps = PS_OVERFLOW;
+            return sign == -1 ? INT_MIN : INT_MAX;
+        }
+
+	if (sign == -1 && (integer > INT_MAX / 10 || (integer == INT_MAX / 10 && digit > -(INT_MIN % 10))))
+	{
+	  *ps = PS_OVERFLOW;
+	  return INT_MIN;
+	}
+
+        integer = integer * 10 + digit;
+    }
+  }
+
+  return (sign? integer * sign : integer);
+}
+  
+  
+  
+  
+  
+  
+  
+  
+  
