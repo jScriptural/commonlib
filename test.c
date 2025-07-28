@@ -7,18 +7,16 @@
 
 int main(void)
 {
-  double A[1][3] = {-2/5.0,1/5.0,1};
-  double B[1][3]= {-2,1,5};
-  double c[1][3] = {0};
+  const double A[3][3]  = {1,2,3,7,1,5,2,8,2};
+  double adjA[3][3] = {0};
+  double prod[3][3] = {0};
 
-  matrix_print("A",1,3,A);
-  matrix_print("B",1,3,B);
+  matrix_adjoint(3,A,adjA);
+  matrix_print("A",3,3,A);
+  matrix_print("adjA",3,3,adjA);
 
-  vector_crossproduct(1,3,A,B,c);
-  
-  matrix_print("AхB",1,3,c);
-
-
+  matrix_multiply(3,3,A,3,adjA,prod);
+  matrix_print("adjA",3,3,prod);
   return 0;
 }
 
